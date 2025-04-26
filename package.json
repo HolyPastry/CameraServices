@@ -1,0 +1,24 @@
+{
+    "name": "com.holypastry.bakery.camera",
+    "version": "0.1.1",
+    "displayName": "Camera Services",
+    "description": "Basic service to handle camera change with Cinemachine.",
+    "unity": "2022.3",
+    "unityRelease": "42f1",
+    "hideInEditor": false,
+    "author": {
+        "name": "Sebastien Berton",
+        "email": "sebasti1.berton@gmail.com",
+        "url": "https://github.com/HolyPastry"
+    },
+    "dependencies": {
+        "com.unity.cinemachine": "2.10.3"
+    },
+    "samples": [
+        {
+            "displayName": "CameraServices",
+            "description": "Contains the main camera prefab",
+            "path": "Samples~/"
+        }
+    ]
+}
