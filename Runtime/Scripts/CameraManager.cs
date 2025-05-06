@@ -13,7 +13,7 @@ namespace Holypastry.Bakery.Cameras
 
     public class CameraManager : Service
     {
-        [SerializeField, Self] private CinemachineBrain _cinemachineBrain;
+        [SerializeField] private CinemachineBrain _cinemachineBrain;
         [SerializeField] private DataCollection<CameraTransition> _cameraTransitions;
         [SerializeField] private CameraReference _gameplayCamera;
         [SerializeField] private CameraReference _startCamera;
@@ -104,7 +104,7 @@ namespace Holypastry.Bakery.Cameras
             var controller = _cameraControllers.Find(c => c.CameraReference.name == name);
             if (controller == null)
             {
-                Debug.LogWarning("No camera found with name " + name);
+                DebugLog("No camera found with name " + name);
                 return;
             }
             SetCamera(controller.CameraReference, null, null);
