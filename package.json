@@ -1,6 +1,6 @@
 {
     "name": "com.holypastry.bakery.camera",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "displayName": "Camera Services",
     "description": "Basic service to handle camera change with Cinemachine.",
     "unity": "2022.3",

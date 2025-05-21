@@ -12,7 +12,7 @@ namespace Holypastry.Bakery.Cameras
         {
             if (!other.CompareTag("Player")) return;
             CameraServices.ToggleCameraControl(true);
-            CameraServices.SetCamera(_cameraReference, null, null);
+            CameraServices.SetCameraWithTarget(_cameraReference, null, null);
             CameraServices.ToggleCameraControl(!_lockCamera);
         }
     }

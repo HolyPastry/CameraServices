@@ -45,8 +45,9 @@ namespace Holypastry.Bakery.Cameras
             CameraServices.ToggleCameraControl = delegate { };
             CameraServices.GetCameraTargetPosition = delegate { return Vector3.zero; };
 
-            CameraServices.SetCamera = delegate { };
+            CameraServices.SetCameraWithTarget = delegate { };
             CameraServices.SetCameraByName = delegate { };
+            CameraServices.SetCamera = delegate { };
             CameraServices.GoToGameplay = delegate { };
 
             CameraServices.RegisterCamera = (cameraName) => { };
@@ -61,14 +62,18 @@ namespace Holypastry.Bakery.Cameras
             CameraServices.ToggleCameraControl = ToggleCameraControl;
             CameraServices.GetCameraTargetPosition = (distanceInFront) => _camera.transform.position + _camera.transform.forward * distanceInFront;
 
-            CameraServices.SetCamera = SetCamera;
+            CameraServices.SetCameraWithTarget = SetCamera;
             CameraServices.SetCameraByName = SetCamera;
+            CameraServices.SetCamera = SetCamera;
             CameraServices.GoToGameplay = GoToGameplay;
 
             CameraServices.RegisterCamera = RegisterCamera;
             CameraServices.UnregisterCamera = UnregisterCamera;
 
         }
+
+
+
 
         protected override IEnumerator Start()
         {
@@ -111,6 +116,8 @@ namespace Holypastry.Bakery.Cameras
 
         }
         private void GoToGameplay() => SetCamera(_gameplayCamera, null, null);
+
+        private void SetCamera(CameraReference reference) => SetCamera(reference, null, null);
         private void SetCamera(CameraReference newReference, Transform follow, Transform aim)
         {
 
