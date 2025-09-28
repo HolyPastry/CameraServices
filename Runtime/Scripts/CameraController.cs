@@ -9,9 +9,10 @@ namespace Holypastry.Bakery.Cameras
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private CameraReference _cameraReference;
-        [SerializeField] private CinemachineVirtualCamera _camera;
+
         [SerializeField] private bool _generateOwnReference = false;
 
+        private CinemachineVirtualCamera _camera;
         public CinemachineVirtualCamera Camera
         {
             get
