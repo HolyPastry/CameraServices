@@ -1,4 +1,5 @@
 
+using System;
 using Cinemachine;
 using KBCore.Refs;
 using UnityEngine;
@@ -12,7 +13,6 @@ namespace Holypastry.Bakery.Cameras
         [SerializeField, Self] private CinemachineVirtualCamera _camera;
         [SerializeField] private bool _generateOwnReference = false;
 
-
         public CameraReference CameraReference
         {
             get => _cameraReference;
@@ -25,7 +25,7 @@ namespace Holypastry.Bakery.Cameras
         {
             _camera.Priority = CameraManager.LOW_PRIORITY;
             if (!_generateOwnReference) return;
-            GenerateSelfReference(name);
+            GenerateSelfReference();
         }
 
         void Start()
@@ -84,10 +84,10 @@ namespace Holypastry.Bakery.Cameras
             _camera.enabled = isOn;
         }
 
-        public void GenerateSelfReference(string referenceName)
+        public void GenerateSelfReference()
         {
             _cameraReference = ScriptableObject.CreateInstance<CameraReference>();
-            _cameraReference.name = referenceName;
+            _cameraReference.name = $"{Guid.NewGuid()}_CameraReference";
         }
     }
 }

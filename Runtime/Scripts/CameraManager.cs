@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 using Cinemachine;
 using Holypastry.Bakery.Flow;
-using KBCore.Refs;
 using UnityEngine;
 
 namespace Holypastry.Bakery.Cameras
@@ -72,9 +71,6 @@ namespace Holypastry.Bakery.Cameras
 
         }
 
-
-
-
         protected override IEnumerator Start()
         {
             yield return FlowServices.WaitUntilReady();
@@ -120,6 +116,11 @@ namespace Holypastry.Bakery.Cameras
         private void SetCamera(CameraReference reference) => SetCamera(reference, null, null);
         private void SetCamera(CameraReference newReference, Transform follow, Transform aim)
         {
+            if (newReference == null)
+            {
+                DebugLog("No camera reference provided");
+                return;
+            }
 
             if (_cameraIsLocked)
             {
