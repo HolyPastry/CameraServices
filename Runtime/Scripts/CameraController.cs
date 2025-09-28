@@ -1,17 +1,26 @@
 
 using System;
 using Cinemachine;
-using KBCore.Refs;
 using UnityEngine;
 
 namespace Holypastry.Bakery.Cameras
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
-    public class CameraController : ValidatedMonoBehaviour
+    public class CameraController : MonoBehaviour
     {
         [SerializeField] private CameraReference _cameraReference;
-        [SerializeField, Self] private CinemachineVirtualCamera _camera;
+        [SerializeField] private CinemachineVirtualCamera _camera;
         [SerializeField] private bool _generateOwnReference = false;
+
+        public CinemachineVirtualCamera Camera
+        {
+            get
+            {
+                if (_camera == null)
+                    _camera = GetComponent<CinemachineVirtualCamera>();
+                return _camera;
+            }
+        }
 
         public CameraReference CameraReference
         {
@@ -23,7 +32,8 @@ namespace Holypastry.Bakery.Cameras
 
         void Awake()
         {
-            _camera.Priority = CameraManager.LOW_PRIORITY;
+
+            Camera.Priority = CameraManager.LOW_PRIORITY;
             if (!_generateOwnReference) return;
             GenerateSelfReference();
         }
@@ -56,18 +66,18 @@ namespace Holypastry.Bakery.Cameras
 
         public void Activate()
         {
-            _camera.gameObject.SetActive(true);
-            _camera.Priority = CameraManager.HIGH_PRIORITY;
+            Camera.gameObject.SetActive(true);
+            Camera.Priority = CameraManager.HIGH_PRIORITY;
         }
 
         public bool Activate(Transform target, Transform aimTarget)
         {
 
             if (target != null)
-                _camera.Follow = target;
+                Camera.Follow = target;
 
             if (aimTarget != null)
-                _camera.LookAt = aimTarget;
+                Camera.LookAt = aimTarget;
             Activate();
 
             return true;
@@ -75,13 +85,13 @@ namespace Holypastry.Bakery.Cameras
 
         public void Deactivate()
         {
-            _camera.Priority = CameraManager.LOW_PRIORITY;
-            _camera.gameObject.SetActive(false);
+            Camera.Priority = CameraManager.LOW_PRIORITY;
+            Camera.gameObject.SetActive(false);
         }
 
         public void SetBrainActive(bool isOn)
         {
-            _camera.enabled = isOn;
+            Camera.enabled = isOn;
         }
 
         public void GenerateSelfReference()
