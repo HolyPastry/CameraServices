@@ -50,6 +50,8 @@ namespace Holypastry.Bakery.Cameras
             CameraServices.RegisterCamera = (cameraName) => { };
             CameraServices.UnregisterCamera = delegate { };
 
+            CameraServices.GetCurrentCamera = () => null;
+
         }
 
         void OnEnable()
@@ -66,6 +68,8 @@ namespace Holypastry.Bakery.Cameras
 
             CameraServices.RegisterCamera = RegisterCamera;
             CameraServices.UnregisterCamera = UnregisterCamera;
+
+            CameraServices.GetCurrentCamera = () => _currentReference;
 
         }
 

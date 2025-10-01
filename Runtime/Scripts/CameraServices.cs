@@ -14,4 +14,6 @@ public static partial class CameraServices
     public static Action<CameraController> UnregisterCamera = delegate { };
     public static Func<WaitUntil> WaitUntilReady = () => new WaitUntil(() => true);
     public static Action<string> SetCameraByName = (cameraName) => { };
+
+    public static Func<CameraReference> GetCurrentCamera = () => null;
 }
