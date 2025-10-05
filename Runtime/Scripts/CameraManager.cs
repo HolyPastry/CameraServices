@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 using Cinemachine;
 using Holypastry.Bakery.Flow;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Holypastry.Bakery.Cameras
 {
@@ -150,7 +152,7 @@ namespace Holypastry.Bakery.Cameras
 
             if (_currentController != null)
                 _currentController.Deactivate();
-            _cinemachineBrain.m_DefaultBlend = SetCameraBlend(_currentReference, newReference);
+            SetCameraTransition(newReference);
             _currentReference = newReference;
 
             nextCamera.Activate(follow, aim);
@@ -159,17 +161,19 @@ namespace Holypastry.Bakery.Cameras
             SetCameraLock();
         }
 
-        private CinemachineBlendDefinition SetCameraBlend(CameraReference currentReference, CameraReference newReference)
+        private void SetCameraTransition(CameraReference newReference)
         {
-            var transition = _cameraTransitions.Find(
-                transition => transition.CameraIn == currentReference && transition.CameraOut == newReference);
+            var transition = _cameraTransitions.Find(transition =>
+                 transition.CameraIn == _currentReference &&
+                transition.CameraOut == newReference);
 
             if (transition == null)
-                return _defaultBlend;
+                _cinemachineBrain.m_DefaultBlend = _defaultBlend;
             else
-                return transition.Blend;
-
+                _cinemachineBrain.m_DefaultBlend = transition.Blend;
+            CameraEvents.OnCameraTransitionStarted.Invoke(transition);
         }
+
 
         private void RecenterCamera(CameraController nextCamera)
         {
