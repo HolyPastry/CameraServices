@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery
 {
     [CreateAssetMenu(menuName = "Bakery/Cameras/Reference")]
     public class CameraReference : ScriptableObject

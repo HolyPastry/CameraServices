@@ -3,7 +3,7 @@ using System;
 using Cinemachine;
 using UnityEngine;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class CameraController : MonoBehaviour
@@ -39,14 +39,19 @@ namespace Holypastry.Bakery.Cameras
             GenerateSelfReference();
         }
 
-        void Start()
+        void OnEnable()
         {
-            CameraServices.RegisterCamera(this);
+            Cameras.Events.CallForRegistration += Register;
+        }
+
+        void Register()
+        {
+            Cameras.Manager().RegisterCamera(this);
         }
 
         void OnDestroy()
         {
-            CameraServices.UnregisterCamera(this);
+            Cameras.Manager().UnregisterCamera(this);
         }
 
         public void DisableControls()

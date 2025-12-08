@@ -1,16 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Reflection.Emit;
 using Cinemachine;
-using Holypastry.Bakery.Flow;
+using Holypastry.Bakery;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery
 {
-
-    public class CameraManager : Service
+    public class CameraManager : MonoBehaviour, ICameraManager
     {
         [SerializeField] private CinemachineBrain _cinemachineBrain;
         [SerializeField] private DataCollection<CameraTransition> _cameraTransitions;
@@ -30,6 +27,12 @@ namespace Holypastry.Bakery.Cameras
         internal static int LOW_PRIORITY = 9;
         private bool _cameraIsLocked;
 
+        private bool _isReady = false;
+
+        public WaitUntil WaitUntilReady => new WaitUntil(() => _isReady);
+
+        public CameraReference CurrentCamera => _currentReference;
+
         void Awake()
         {
             _camera = Camera.main;
@@ -37,47 +40,20 @@ namespace Holypastry.Bakery.Cameras
             _defaultBlend = _cinemachineBrain.m_DefaultBlend;
         }
 
-        void OnDisable()
-        {
-            CameraServices.WaitUntilReady = () => WaitUntilReady;
-
-            CameraServices.ToggleCameraControl = delegate { };
-            CameraServices.GetCameraTargetPosition = delegate { return Vector3.zero; };
-
-            CameraServices.SetCameraWithTarget = delegate { };
-            CameraServices.SetCameraByName = delegate { };
-            CameraServices.SetCamera = delegate { };
-            CameraServices.GoToGameplay = delegate { };
-
-            CameraServices.RegisterCamera = (cameraName) => { };
-            CameraServices.UnregisterCamera = delegate { };
-
-            CameraServices.GetCurrentCamera = () => null;
-
-        }
-
         void OnEnable()
         {
-            CameraServices.WaitUntilReady = () => new WaitUntil(() => _isReady);
-
-            CameraServices.ToggleCameraControl = ToggleCameraControl;
-            CameraServices.GetCameraTargetPosition = (distanceInFront) => _camera.transform.position + _camera.transform.forward * distanceInFront;
-
-            CameraServices.SetCameraWithTarget = SetCamera;
-            CameraServices.SetCameraByName = SetCamera;
-            CameraServices.SetCamera = SetCamera;
-            CameraServices.GoToGameplay = GoToGameplay;
-
-            CameraServices.RegisterCamera = RegisterCamera;
-            CameraServices.UnregisterCamera = UnregisterCamera;
-
-            CameraServices.GetCurrentCamera = () => _currentReference;
+            Cameras.Manager = () => this;
 
         }
-
-        protected override IEnumerator Start()
+        void OnDisable()
         {
-            yield return FlowServices.WaitUntilReady();
+            Cameras.Manager = Cameras.UnregisterManager;
+        }
+
+        protected IEnumerator Start()
+        {
+            Cameras.Events.CallForRegistration.Invoke();
+            yield return Flow.Manager().WaitUntilReady;
 
             if (_startCamera != null)
                 SetCamera(_startCamera, null, null);
@@ -91,20 +67,9 @@ namespace Holypastry.Bakery.Cameras
         }
 
 
-        private void UnregisterCamera(CameraController controller)
-        {
-            _cameraControllers.Remove(controller);
-        }
 
-        private void RegisterCamera(CameraController controller)
-        {
-            if (!_cameraControllers.Contains(controller))
-                _cameraControllers.Add(controller);
-            if (controller != _currentController)
-                controller.gameObject.SetActive(false);
-        }
 
-        private void SetCamera(string name)
+        public void SetCamera(string name)
         {
             var controller = _cameraControllers.Find(c => c.CameraReference.name == name);
             if (controller == null)
@@ -115,10 +80,10 @@ namespace Holypastry.Bakery.Cameras
             SetCamera(controller.CameraReference, null, null);
 
         }
-        private void GoToGameplay() => SetCamera(_gameplayCamera, null, null);
+        public void GoToGameplay() => SetCamera(_gameplayCamera, null, null);
 
-        private void SetCamera(CameraReference reference) => SetCamera(reference, null, null);
-        private void SetCamera(CameraReference newReference, Transform follow, Transform aim)
+        public void SetCamera(CameraReference reference) => SetCamera(reference, null, null);
+        public void SetCamera(CameraReference newReference, Transform follow, Transform aim)
         {
             if (newReference == null)
             {
@@ -145,7 +110,7 @@ namespace Holypastry.Bakery.Cameras
 
             DebugLog("Switching to camera: " + newReference.name);
 
-            CameraEvents.OnCameraChanged.Invoke(newReference);
+            Cameras.Events.OnCameraChanged.Invoke(newReference);
             if (newReference.GameplayCamera)
                 RecenterCamera(nextCamera);
 
@@ -171,7 +136,7 @@ namespace Holypastry.Bakery.Cameras
                 _cinemachineBrain.m_DefaultBlend = _defaultBlend;
             else
                 _cinemachineBrain.m_DefaultBlend = transition.Blend;
-            CameraEvents.OnCameraTransitionStarted.Invoke(transition);
+            Cameras.Events.OnCameraTransitionStarted.Invoke(transition);
         }
 
 
@@ -200,7 +165,7 @@ namespace Holypastry.Bakery.Cameras
             _cameraIsLocked = !isOn;
             SetCameraLock();
 
-            CameraEvents.OnCameraLocked.Invoke(!isOn);
+            Cameras.Events.OnCameraLocked.Invoke(!isOn);
         }
 
         private void SetCameraLock()
@@ -210,6 +175,19 @@ namespace Holypastry.Bakery.Cameras
                 _currentController.DisableControls();
             else
                 _currentController.EnableControls();
+        }
+
+        void ICameraManager.RegisterCamera(CameraController controller)
+        {
+            if (!_cameraControllers.Contains(controller))
+                _cameraControllers.Add(controller);
+            if (controller != _currentController)
+                controller.gameObject.SetActive(false);
+        }
+
+        void ICameraManager.UnregisterCamera(CameraController controller)
+        {
+            _cameraControllers.Remove(controller);
         }
     }
 }
