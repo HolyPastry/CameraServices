@@ -98,6 +98,7 @@ namespace Bakery
             }
             if (_currentReference == newReference)
             {
+                _currentController.Activate(follow, aim);
                 DebugLog("Camera is already set to " + newReference.name);
                 return;
             }
