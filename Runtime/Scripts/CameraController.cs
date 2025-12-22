@@ -43,6 +43,10 @@ namespace Bakery
         {
             Cameras.Events.CallForRegistration += Register;
         }
+        void OnDisable()
+        {
+            Cameras.Events.CallForRegistration -= Register;
+        }
 
         void Register()
         {
