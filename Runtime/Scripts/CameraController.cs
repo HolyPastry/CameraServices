@@ -53,11 +53,6 @@ namespace Bakery
             Cameras.Manager().RegisterCamera(this);
         }
 
-        void OnDestroy()
-        {
-            Cameras.Manager().UnregisterCamera(this);
-        }
-
         public void DisableControls()
         {
             if (_inputProvider == null)

@@ -38,14 +38,11 @@ namespace Bakery
             _camera = Camera.main;
             _cameraTransitions = new DataCollection<CameraTransition>("CameraTransitions");
             _defaultBlend = _cinemachineBrain.m_DefaultBlend;
-        }
-
-        void OnEnable()
-        {
             Cameras.Manager = () => this;
-
         }
-        void OnDisable()
+
+
+        void OnDestroy()
         {
             Cameras.Manager = Cameras.UnregisterManager;
         }

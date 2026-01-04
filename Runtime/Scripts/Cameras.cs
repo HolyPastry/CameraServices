@@ -58,7 +58,7 @@ namespace Bakery
             Manager = UnregisterManager;
 
 #if UNITY_EDITOR
-            Debug.Log("[Flow] Static fields reset (domain reload skipped)");
+            Debug.Log("[Cameras] Static fields reset (domain reload skipped)");
 #endif
         }
 
