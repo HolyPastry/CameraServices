@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Bakery.Core;
 using Cinemachine;
-using Holypastry.Bakery.Flow;
+using Bakery.Flow;
 using UnityEngine;
 
 namespace Bakery.Cameras
