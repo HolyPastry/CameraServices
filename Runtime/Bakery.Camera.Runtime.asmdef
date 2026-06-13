@@ -1,5 +1,5 @@
 {
-    "name": "Holypastry.Bakery.Cameras",
+    "name": "Bakery.Camera.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:4307f53044263cf4b835bd812fc161a4",
