@@ -1,15 +1,13 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
-
+using Bakery.Core;
 using Cinemachine;
 using Holypastry.Bakery.Flow;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery.Cameras
 {
-
     public class CameraManager : Service
     {
         [SerializeField] private CinemachineBrain _cinemachineBrain;

@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery.Cameras
 {
     [RequireComponent(typeof(Collider))]
     public class CameraTrigger : MonoBehaviour

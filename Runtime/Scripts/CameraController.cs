@@ -3,7 +3,7 @@ using System;
 using Cinemachine;
 using UnityEngine;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery.Cameras
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class CameraController : MonoBehaviour

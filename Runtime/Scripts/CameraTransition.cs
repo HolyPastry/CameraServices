@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-namespace Holypastry.Bakery.Cameras
+namespace Bakery.Cameras
 {
     [CreateAssetMenu(menuName = "Bakery/Cameras/Transition")]
     public class CameraTransition : ScriptableObject
