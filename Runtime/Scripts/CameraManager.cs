@@ -14,6 +14,7 @@ namespace Bakery.Cameras
         [SerializeField] private DataCollection<CameraTransition> _cameraTransitions;
         [SerializeField] private CameraReference _gameplayCamera;
         [SerializeField] private CameraReference _startCamera;
+        [SerializeField] private bool _recenterOnGameplayCamera = false;
 
         [SerializeField] private bool _debugMode = false;
 
@@ -144,7 +145,7 @@ namespace Bakery.Cameras
             DebugLog("Switching to camera: " + newReference.name);
 
             CameraEvents.OnCameraChanged.Invoke(newReference);
-            if (newReference.GameplayCamera)
+            if (newReference.GameplayCamera && _recenterOnGameplayCamera)
                 RecenterCamera(nextCamera);
 
 
